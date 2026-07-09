@@ -69,6 +69,9 @@ export const refreshUserSession = async (req, res) => {
   }
 
   if (session.refreshTokenValidUntil < new Date()) {
+    await Session.findByIdAndDelete(session._id);
+    clearSessionCookies(res);
+
     throw createHttpError(401, 'Session token expired');
   }
 
