@@ -167,6 +167,16 @@ export const resetPassword = async (req, res) => {
     throw createHttpError(401, 'Invalid or expired token');
   }
 
+  if (
+    typeof payload !== 'object' ||
+    !payload ||
+    !payload.sub ||
+    !payload.email ||
+    !isValidObjectId(payload.sub)
+  ) {
+    throw createHttpError(401, 'Invalid or expired token');
+  }
+
   const user = await User.findOne({
     _id: payload.sub,
     email: payload.email,
